@@ -59,18 +59,7 @@ static const CGFloat NYTPhotoCaptionViewVerticalMargin = 7.0;
     [super layoutSubviews];
 
     void (^updateGradientFrame)(void) = ^{
-        if (@available(iOS 11.0, *)) {
-            UIEdgeInsets safeAreaInsets = [[UIApplication sharedApplication] keyWindow].safeAreaInsets;
-            CGRect selfBounds = self.layer.bounds;
-            self.gradientLayer.frame = CGRectMake(
-                                                  selfBounds.origin.x - safeAreaInsets.left,
-                                                  selfBounds.origin.y + safeAreaInsets.bottom,
-                                                  selfBounds.size.width + safeAreaInsets.left + safeAreaInsets.right,
-                                                  selfBounds.size.height + safeAreaInsets.bottom
-                                                  );
-        } else {
-            self.gradientLayer.frame = self.layer.bounds;
-        }
+        self.gradientLayer.frame = self.layer.bounds;
     };
 
     updateGradientFrame();
@@ -118,7 +107,6 @@ static const CGFloat NYTPhotoCaptionViewVerticalMargin = 7.0;
 
     [self setupTextView];
     [self updateTextViewAttributedText];
-    [self setupGradient];
 }
 
 - (void)setupTextView {
@@ -126,7 +114,7 @@ static const CGFloat NYTPhotoCaptionViewVerticalMargin = 7.0;
     self.textView.translatesAutoresizingMaskIntoConstraints = NO;
     self.textView.editable = NO;
     self.textView.dataDetectorTypes = UIDataDetectorTypeNone;
-    self.textView.backgroundColor = [UIColor clearColor];
+    self.textView.backgroundColor = [UIColor systemBackgroundColor];
     self.textView.textContainerInset = UIEdgeInsetsMake(NYTPhotoCaptionViewVerticalMargin, NYTPhotoCaptionViewHorizontalMargin, NYTPhotoCaptionViewVerticalMargin, NYTPhotoCaptionViewHorizontalMargin);
 
     [self addSubview:self.textView];
