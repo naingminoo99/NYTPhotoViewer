@@ -69,7 +69,7 @@
     self.navigationBar.translatesAutoresizingMaskIntoConstraints = NO;
     
     // Make navigation bar background fully transparent.
-    self.navigationBar.backgroundColor = [UIColor clearColor];
+    self.navigationBar.backgroundColor = [UIColor systemBackgroundColor];
     self.navigationBar.barTintColor = nil;
     self.navigationBar.translucent = YES;
     self.navigationBar.shadowImage = [[UIImage alloc] init];
@@ -91,6 +91,29 @@
         NSLayoutConstraint *horizontalPositionConstraint = [NSLayoutConstraint constraintWithItem:self.navigationBar attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0.0];
         [self addConstraints:@[topConstraint, widthConstraint, horizontalPositionConstraint]];
     }
+    
+    // - Fix for newer iPhone Models having transparent space on top of navigation bar
+    UIView *spacer = [[UIView alloc] init];
+    spacer.translatesAutoresizingMaskIntoConstraints = NO;
+    spacer.backgroundColor = [UIColor systemBackgroundColor];
+    NSLayoutConstraint *paddingtop = [NSLayoutConstraint constraintWithItem:spacer attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeTop multiplier:1.0 constant:0.0];
+    NSLayoutConstraint *paddingleft = [spacer.leftAnchor constraintEqualToAnchor:self.safeAreaLayoutGuide.leftAnchor];
+    NSLayoutConstraint *paddingright = [spacer.rightAnchor constraintEqualToAnchor:self.safeAreaLayoutGuide.rightAnchor];
+    NSLayoutConstraint *paddingbot = [spacer.bottomAnchor constraintEqualToAnchor:self.safeAreaLayoutGuide.topAnchor];
+    [self addSubview:spacer];
+    [self addConstraints:@[paddingtop, paddingleft, paddingright,paddingbot]];
+    
+    // - Fix for newer iPhone Models having transparent space on bottom of safe area
+    UIView *botspacer = [[UIView alloc] init];
+    botspacer.translatesAutoresizingMaskIntoConstraints = NO;
+    botspacer.backgroundColor = [UIColor systemBackgroundColor];
+    NSLayoutConstraint *bpaddingtop = [botspacer.topAnchor constraintEqualToAnchor:self.safeAreaLayoutGuide.bottomAnchor];
+    NSLayoutConstraint *bpaddingleft = [botspacer.leftAnchor constraintEqualToAnchor:self.safeAreaLayoutGuide.leftAnchor];
+    NSLayoutConstraint *bpaddingright = [botspacer.rightAnchor constraintEqualToAnchor:self.safeAreaLayoutGuide.rightAnchor];
+    NSLayoutConstraint *bpaddingbot = [NSLayoutConstraint constraintWithItem:botspacer attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0.0];
+    [self addSubview:botspacer];
+    [self addConstraints:@[bpaddingtop, bpaddingleft, bpaddingright,bpaddingbot]];
+
 }
 
 - (void)setCaptionView:(UIView *)captionView {
